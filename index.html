@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Darsh Balar | Digital Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0077be;
+            --primary-dark: #005a96;
+            --secondary: #00a8e8;
+            --accent: #00c9ff;
+            --dark: #003d5c;
+            --darker: #001f2f;
+            --light: #e8f4f8;
+            --gray: #4a7c8f;
+            --white: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: var(--light);
+            scroll-behavior: smooth;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container { display:flex; justify-content:space-between; align-items:center; padding:20px; }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links { display:flex; list-style:none; gap:30px; }
+        .nav-links a { text-decoration:none; color:var(--dark); font-weight:500; position:relative; transition: all 0.3s ease; }
+        .nav-links a::after { content: ''; position:absolute; bottom:-5px; left:0; width:0; height:2px; background: linear-gradient(90deg, var(--primary), var(--secondary)); transition: width 0.3s ease; }
+        .nav-links a:hover::after { width:100%; }
+
+        .mobile-toggle { display:none; font-size:1.5rem; cursor:pointer; color:var(--dark); }
+
+        /* Cover Page */
+        .cover {
+            min-height: 100vh;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            background: linear-gradient(135deg, #0077be 0%, #00a8e8 100%);
+            position:relative;
+            overflow:hidden;
+            margin-top: 80px;
+        }
+
+        .cover::before {
+            content: '';
+            position: absolute;
+            top:0; left:0; right:0; bottom:0;
+            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.1)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .cover-content { text-align:center; color:white; z-index:1; animation: fadeInUp 1s ease; }
+        .profile-photo { width:270px; height:310px; border-radius:50%; border:6px solid rgba(255,255,255,0.3); margin-bottom:30px; box-shadow:0 20px 60px rgba(0,0,0,0.3); animation: float 3s ease-in-out infinite; object-fit:cover; }
+        .cover-content h1 { font-size:3.5rem; margin-bottom:15px; font-weight:800; text-shadow:2px 2px 20px rgba(0,0,0,0.2); }
+        .cover-content .tagline { font-size:1.3rem; margin-bottom:10px; font-weight:300; opacity:0.95; }
+        .cover-content .institution { font-size:1.1rem; opacity:0.9; margin-bottom:5px; }
+        .cover-content .date { font-size:1rem; opacity:0.85; }
+        .scroll-indicator { position:absolute; bottom:30px; left:50%; transform:translateX(-50%); animation:bounce 2s infinite; }
+        .scroll-indicator i { color:white; font-size:2rem; }
+
+        /* Section Styles */
+        .section { padding:100px 0; }
+        .section-header { text-align:center; margin-bottom:60px; }
+        .section-header h2 { font-size:2.8rem; font-weight:700; color:var(--darker); margin-bottom:15px; position:relative; display:inline-block; }
+        .section-header h2::after { content:''; position:absolute; bottom:-10px; left:50%; transform:translateX(-50%); width:80px; height:4px; background: linear-gradient(90deg, var(--primary), var(--secondary)); border-radius:2px; }
+        .section-header p { color:var(--gray); font-size:1.1rem; max-width:700px; margin:20px auto 0; }
+
+        /* Table of Contents */
+        .toc-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:25px; margin-top:40px; }
+        .toc-item { background:white; padding:30px; border-radius:15px; box-shadow:0 5px 25px rgba(0,0,0,0.08); transition:all 0.3s ease; cursor:pointer; border:2px solid transparent; text-decoration:none; display:block; }
+        .toc-item:hover { transform: translateY(-8px); box-shadow:0 15px 40px rgba(0,0,0,0.12); border-color:var(--primary); }
+        .toc-item i { font-size:2.5rem; color:var(--primary); margin-bottom:15px; display:block; }
+        .toc-item h3 { color:var(--darker); margin-bottom:10px; font-size:1.3rem; }
+        .toc-item p { color:var(--gray); font-size:0.95rem; }
+
+        /* Remaining styles unchanged... (keep original styles for resume, projects, skills, etc.) */
+
+        .philosophy-content { background:white; padding:50px; border-radius:20px; box-shadow:0 10px 40px rgba(0,0,0,0.08); max-width:900px; margin:0 auto; }
+        .philosophy-content h3 { color:var(--primary); font-size:1.8rem; margin-bottom:20px; }
+        .philosophy-content p { color:var(--dark); font-size:1.1rem; line-height:1.8; margin-bottom:20px; }
+        .values-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:20px; margin-top:30px; }
+        .value-card { background: linear-gradient(135deg, var(--primary), var(--secondary)); color:white; padding:25px; border-radius:12px; text-align:center; }
+        .value-card i { font-size:2rem; margin-bottom:10px; }
+
+        .resume-grid { display:grid; grid-template-columns:1fr 1fr; gap:40px; }
+        .resume-section { background:white; padding:35px; border-radius:15px; box-shadow:0 5px 25px rgba(0,0,0,0.08); }
+        .resume-section.full-width { grid-column:1 / -1; }
+        .resume-section h3 { color:var(--primary); font-size:1.6rem; margin-bottom:25px; display:flex; align-items:center; gap:10px; }
+        .resume-item { margin-bottom:25px; padding-bottom:25px; border-bottom:1px solid #e2e8f0; }
+        .resume-item:last-child { border-bottom:none; padding-bottom:0; margin-bottom:0; }
+        .resume-item h4 { color:var(--darker); font-size:1.2rem; margin-bottom:8px; }
+        .resume-item .meta { color:var(--gray); font-size:0.95rem; margin-bottom:10px; }
+        .resume-item p { color:var(--dark); line-height:1.6; }
+        .resume-item ul { margin-left:20px; margin-top:10px; }
+        .resume-item li { margin-bottom:5px; }
+
+        .skills-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap:12px; }
+        .skill-tag { background: linear-gradient(135deg, #f0f9ff, #e0f2fe); color:var(--primary); padding:12px 18px; border-radius:8px; text-align:center; font-weight:500; font-size:0.9rem; border:1px solid rgba(59,130,246,0.2); }
+
+        .advanced-skills-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap:30px; }
+        .skill-category { background:white; padding:35px; border-radius:15px; box-shadow:0 5px 25px rgba(0,0,0,0.08); }
+        .skill-category h3 { color:var(--primary); font-size:1.5rem; margin-bottom:25px; display:flex; align-items:center; gap:10px; }
+        .skill-item-advanced { margin-bottom:20px; }
+        .skill-item-advanced h4 { color:var(--darker); font-size:1.1rem; margin-bottom:8px; }
+        .skill-item-advanced p { color:var(--dark); line-height:1.6; margin-bottom:10px; }
+        .artifact-badge { display:inline-block; background: linear-gradient(135deg, var(--accent), #f97316); color:white; padding:5px 12px; border-radius:20px; font-size:0.85rem; margin-top:5px; }
+
+        .projects-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap:35px; }
+        .project-card { background:white; border-radius:20px; overflow:hidden; box-shadow:0 10px 40px rgba(0,0,0,0.08); transition: all 0.3s ease; }
+        .project-card:hover { transform: translateY(-10px); box-shadow:0 20px 60px rgba(0,0,0,0.15); }
+        .project-image { height:220px; background-size:cover; background-position:center; position:relative; }
+        .project-image::after { content:''; position:absolute; top:0; left:0; right:0; bottom:0; background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.3)); }
+        .project-content { padding:30px; }
+        .project-content h3 { color:var(--darker); font-size:1.5rem; margin-bottom:15px; }
+        .project-content .project-meta { display:flex; gap:15px; margin-bottom:15px; flex-wrap:wrap; }
+        .meta-badge { background:#f1f5f9; padding:5px 12px; border-radius:20px; font-size:0.85rem; color:var(--gray); }
+        .project-content h4 { color:var(--primary); font-size:1.1rem; margin-top:20px; margin-bottom:10px; }
+        .project-content p { color:var(--dark); line-height:1.7; margin-bottom:15px; }
+        .project-tags { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px; }
+        .tag { background: linear-gradient(135deg, var(--primary), var(--secondary)); color:white; padding:6px 14px; border-radius:20px; font-size:0.85rem; }
+        .project-outcomes { background:#f8fafc; padding:20px; border-radius:10px; margin-top:20px; }
+        .project-outcomes ul { margin-left:20px; color:var(--dark); }
+        .project-outcomes li { margin-bottom:8px; }
+        .project-challenges { background:#fff7ed; padding:20px; border-radius:10px; margin-top:15px; border-left:4px solid var(--accent); }
+
+        .leadership-grid { display:grid; gap:30px; }
+        .leadership-card { background:white; padding:40px; border-radius:20px; box-shadow:0 10px 40px rgba(0,0,0,0.08); }
+        .leadership-header { display:flex; align-items:center; gap:20px; margin-bottom:25px; }
+        .leadership-icon { width:70px; height:70px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius:15px; display:flex; align-items:center; justify-content:center; color:white; font-size:2rem; flex-shrink:0; }
+        .leadership-card h3 { color:var(--darker); font-size:1.6rem; }
+        .leadership-card .role { color:var(--primary); font-weight:600; margin-bottom:10px; }
+        .leadership-card h4 { color:var(--primary); font-size:1.2rem; margin-top:20px; margin-bottom:10px; }
+
+        .awareness-content { max-width:1000px; margin:0 auto; }
+        .case-study { background:white; padding:40px; border-radius:20px; box-shadow:0 10px 40px rgba(0,0,0,0.08); margin-bottom:30px; }
+        .case-study h3 { color:var(--primary); font-size:1.7rem; margin-bottom:20px; }
+        .case-study h4 { color:var(--darker); font-size:1.3rem; margin-top:25px; margin-bottom:15px; }
+        .case-study p { color:var(--dark); line-height:1.7; margin-bottom:15px; }
+        .case-study ul { margin-left:20px; color:var(--dark); }
+        .case-study li { margin-bottom:10px; }
+        .reflection-box { background: linear-gradient(135deg, #ede9fe, #ddd6fe); padding:25px; border-radius:12px; margin-top:20px; border-left:4px solid var(--secondary); }
+
+        .aspirations-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap:30px; }
+        .aspiration-card { background:white; padding:35px; border-radius:15px; box-shadow:0 5px 25px rgba(0,0,0,0.08); }
+        .aspiration-card h3 { color:var(--primary); font-size:1.5rem; margin-bottom:20px; display:flex; align-items:center; gap:10px; }
+        .timeline { position:relative; padding-left:30px; }
+        .timeline::before { content:''; position:absolute; left:0; top:0; bottom:0; width:2px; background: linear-gradient(to bottom, var(--primary), var(--secondary)); }
+        .timeline-item { margin-bottom:25px; position:relative; }
+        .timeline-item::before { content:''; position:absolute; left:-35px; top:5px; width:10px; height:10px; border-radius:50%; background:var(--primary); }
+        .timeline-item h4 { color:var(--darker); font-size:1.1rem; margin-bottom:5px; }
+        .timeline-item p { color:var(--gray); font-size:0.95rem; }
+
+        .swot-grid { display:grid; grid-template-columns: repeat(2,1fr); gap:25px; margin-top:30px; }
+        .swot-item { background:white; padding:35px; border-radius:15px; box-shadow:0 5px 25px rgba(0,0,0,0.08); }
+        .swot-item h3 { display:flex; align-items:center; gap:10px; margin-bottom:20px; font-size:1.5rem; }
+        .swot-item.strengths h3 { color:#10b981; }
+        .swot-item.weaknesses h3 { color:#ef4444; }
+        .swot-item.opportunities h3 { color:#3b82f6; }
+        .swot-item.threats h3 { color:#f59e0b; }
+        .swot-item ul { margin-left:20px; color:var(--dark); }
+        .swot-item li { margin-bottom:12px; line-height:1.6; }
+
+        .testimonials-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap:30px; }
+        .testimonial-card { background:white; padding:35px; border-radius:20px; box-shadow:0 10px 40px rgba(0,0,0,0.08); position:relative; }
+        .testimonial-card::before { content:'"'; position:absolute; top:20px; left:20px; font-size:4rem; color:var(--primary); opacity:0.2; font-family:Georgia, serif; }
+        .testimonial-content { position:relative; z-index:1; }
+        .testimonial-text { color:var(--dark); font-style:italic; line-height:1.7; margin-bottom:25px; font-size:1.05rem; }
+        .testimonial-author { display:flex; align-items:center; gap:15px; padding-top:20px; border-top:2px solid #f1f5f9; }
+        .author-avatar { width:55px; height:55px; border-radius:50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); display:flex; align-items:center; justify-content:center; color:white; font-size:1.4rem; font-weight:600; }
+        .author-info h4 { color:var(--darker); font-size:1.1rem; margin-bottom:3px; }
+        .author-info p { color:var(--gray); font-size:0.9rem; }
+
+        .conclusion-content { max-width:900px; margin:0 auto; background:white; padding:50px; border-radius:20px; box-shadow:0 10px 40px rgba(0,0,0,0.08); }
+        .conclusion-content h3 { color:var(--primary); font-size:1.8rem; margin-bottom:20px; }
+        .conclusion-content p { color:var(--dark); font-size:1.1rem; line-height:1.8; margin-bottom:20px; }
+        .achievements-highlight { background: linear-gradient(135deg, #f0f9ff, #e0f2fe); padding:25px; border-radius:12px; margin:25px 0; }
+        .achievements-highlight h4 { color:var(--primary); font-size:1.3rem; margin-bottom:15px; }
+        .achievements-highlight ul { margin-left:20px; }
+        .achievements-highlight li { margin-bottom:10px; color:var(--dark); }
+
+        .contact-grid { display:grid; grid-template-columns: 1fr 1fr; gap:40px; max-width:1000px; margin:0 auto; }
+        .contact-info { background:white; padding:40px; border-radius:20px; box-shadow:0 10px 40px rgba(0,0,0,0.08); }
+        .contact-item { display:flex; align-items:center; gap:20px; margin-bottom:25px; }
+        .contact-icon { width:55px; height:55px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius:12px; display:flex; align-items:center; justify-content:center; color:white; font-size:1.3rem; flex-shrink:0; }
+        .contact-text h4 { color:var(--darker); font-size:1.1rem; margin-bottom:5px; }
+        .contact-text p { color:var(--gray); }
+        .contact-text a { color:var(--primary); text-decoration:none; }
+        .contact-text a:hover { text-decoration:underline; }
+
+        footer { background:var(--darker); color:white; padding:60px 0 30px; margin-top:100px; }
+        .footer-content { display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap:40px; margin-bottom:40px; }
+        .footer-section h3 { margin-bottom:20px; font-size:1.3rem; }
+        .footer-links { list-style:none; }
+        .footer-links li { margin-bottom:12px; }
+        .footer-links a { color: rgba(255,255,255,0.8); text-decoration:none; transition: color 0.3s ease; }
+        .footer-links a:hover { color:white; }
+        .social-links { display:flex; gap:15px; margin-top:20px; }
+        .social-link { width:45px; height:45px; background: rgba(255,255,255,0.1); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; text-decoration:none; transition: all 0.3s ease; }
+        .social-link:hover { background: var(--primary); transform: translateY(-5px); }
+        .footer-bottom { text-align:center; padding-top:30px; border-top:1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.6); }
+
+        @keyframes fadeInUp { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes float { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-20px); } }
+        @keyframes bounce { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-10px); } }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .resume-grid, .swot-grid, .contact-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            .mobile-toggle { display:block; }
+            .nav-links { display:none; position:absolute; top:100%; left:0; right:0; background:white; flex-direction:column; padding:20px; box-shadow:0 10px 30px rgba(0,0,0,0.1); gap:10px; }
+            .nav-links.active { display:flex; }
+            .cover-content h1 { font-size:2.2rem; }
+            .section-header h2 { font-size:2rem; }
+            .philosophy-content { padding:30px; }
+            .projects-grid { grid-template-columns:1fr; }
+            .advanced-skills-grid { grid-template-columns:1fr; }
+            .aspirations-grid { grid-template-columns:1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="container">
+            <div class="nav-container">
+                <div class="logo">Darsh Balar</div>
+                <ul class="nav-links" id="navLinks">
+                    <li><a href="#cover">Home</a></li>
+                    <li><a href="#toc">Contents</a></li>
+                    <li><a href="#philosophy">Philosophy</a></li>
+                    <li><a href="#resume">Resume</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#skills">Skills</a></li>
+                    <li><a href="#leadership">Leadership</a></li>
+                    <li><a href="#global">Global</a></li>
+                    <li><a href="#testimonials">Testimonials</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+                <div class="mobile-toggle" id="mobileToggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Cover Page -->
+    <section class="cover" id="cover">
+        <div class="cover-content">
+            <!-- replace darsh-photo.jpeg with your actual photo file in same folder -->
+            <img src="darsh_photo.png" alt="Darsh Balar" class="profile-photo">
+            <h1>Darsh Balar</h1>
+            <p class="tagline">"Bridging Innovation and Excellence Through Technology"</p>
+            <p class="institution">Pandit Deendayal Energy University</p>
+            <p class="institution">B.Tech CSE — Batch: 2023 - 2027</p>
+            <p class="date">CGPA: 8.74</p>
+        </div>
+        <div class="scroll-indicator">
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- Table of Contents -->
+    <section class="section" id="toc">
+        <div class="container">
+            <div class="section-header">
+                <h2>Portfolio Contents</h2>
+                <p>Navigate through my academic journey and professional achievements</p>
+            </div>
+            <div class="toc-grid">
+                <a href="#philosophy" class="toc-item">
+                    <i class="fas fa-lightbulb"></i>
+                    <h3>Learning Philosophy</h3>
+                    <p>My core values and intellectual framework</p>
+                </a>
+                <a href="#resume" class="toc-item">
+                    <i class="fas fa-file-alt"></i>
+                    <h3>Resume & CV</h3>
+                    <p>Education, experience, and qualifications</p>
+                </a>
+                <a href="#projects" class="toc-item">
+                    <i class="fas fa-project-diagram"></i>
+                    <h3>Projects & Research</h3>
+                    <p>Interdisciplinary work and innovations</p>
+                </a>
+                <a href="#skills" class="toc-item">
+                    <i class="fas fa-code"></i>
+                    <h3>Advanced Skills</h3>
+                    <p>Technical and soft skill proficiencies</p>
+                </a>
+                <a href="#leadership" class="toc-item">
+                    <i class="fas fa-users"></i>
+                    <h3>Leadership Experience</h3>
+                    <p>Collaborative and team achievements</p>
+                </a>
+                <a href="#global" class="toc-item">
+                    <i class="fas fa-globe"></i>
+                    <h3>Global Awareness</h3>
+                    <p>Ethical considerations and impact</p>
+                </a>
+                <a href="#future" class="toc-item">
+                    <i class="fas fa-rocket"></i>
+                    <h3>Future Aspirations</h3>
+                    <p>Career goals and development plans</p>
+                </a>
+                <a href="#swot" class="toc-item">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Self-Assessment</h3>
+                    <p>SWOT analysis and reflections</p>
+                </a>
+                <a href="#testimonials" class="toc-item">
+                    <i class="fas fa-quote-right"></i>
+                    <h3>Testimonials</h3>
+                    <p>Recommendations from mentors</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Learning Philosophy -->
+    <section class="section" id="philosophy" style="background: white;">
+        <div class="container">
+            <div class="section-header">
+                <h2>Learning Philosophy</h2>
+                <p>The principles that guide my academic and personal growth</p>
+            </div>
+            <div class="philosophy-content">
+                <h3>My Learning Journey</h3>
+                <p>My academic journey has been shaped by an unwavering curiosity about how technology can transform lives and solve real-world challenges. From my early days of writing simple code to developing complex interdisciplinary projects, I've embraced every opportunity to expand my knowledge and push boundaries.</p>
+                
+                <p>I believe that true learning transcends textbooks and classrooms—it happens when we actively engage with problems, collaborate with diverse minds, and remain open to failure as a teacher. My approach combines rigorous technical training with a deep appreciation for ethical implications, ensuring that innovation serves humanity's best interests.</p>
+                
+                <p>With a CGPA of 8.74, I've not only demonstrated academic excellence but also developed a learning philosophy centered on continuous improvement, interdisciplinary thinking, and purposeful application of knowledge. I view education as a lifelong journey where each project, collaboration, and challenge contributes to becoming a more versatile and impactful professional.</p>
+
+                <h3>Core Values</h3>
+                <div class="values-grid">
+                    <div class="value-card">
+                        <i class="fas fa-brain"></i>
+                        <h4>Intellectual Curiosity</h4>
+                        <p>Always questioning, learning, exploring</p>
+                    </div>
+                    <div class="value-card">
+                        <i class="fas fa-balance-scale"></i>
+                        <h4>Ethical Integrity</h4>
+                        <p>Technology with responsibility</p>
+                    </div>
+                    <div class="value-card">
+                        <i class="fas fa-hands-helping"></i>
+                        <h4>Collaborative Spirit</h4>
+                        <p>Stronger together</p>
+                    </div>
+                    <div class="value-card">
+                        <i class="fas fa-trophy"></i>
+                        <h4>Excellence</h4>
+                        <p>Commitment to quality</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resume Section -->
+    <section class="section" id="resume">
+        <div class="container">
+            <div class="section-header">
+                <h2>Resume & Qualifications</h2>
+                <p>Comprehensive overview of my education, experience, and competencies</p>
+            </div>
+            <div class="resume-grid">
+                <div class="resume-section">
+                    <h3><i class="fas fa-graduation-cap"></i> Education</h3>
+                    <div class="resume-item">
+                        <h4>Bachelor of Technology</h4>
+                        <p class="meta">Pandit Deendayal Energy University | 2023 - 2027</p>
+                        <p><strong>Computer Science & Engineering</strong></p>
+                        <p>CGPA: 8.74/10.0</p>
+                        <p><strong>Relevant Coursework:</strong> Data Structures & Algorithms, Database Management Systems, Software Engineering, Machine Learning, Web Development, Computer Networks, Operating Systems, Cloud Computing</p>
+                    </div>
+                    <div class="resume-item">
+                        <h4>Higher Secondary Education</h4>
+                        <p class="meta">Gujarat Board | 2021 - 2023</p>
+                        <p>Percentage: 92.5% | Science Stream (PCM with Computer)</p>
+                    </div>
+                </div>
+
+                <div class="resume-section">
+                    <h3><i class="fas fa-briefcase"></i> Work Experience</h3>
+                    <div class="resume-item">
+                        <h4>Software Development Intern</h4>
+                        <p class="meta">Tech Innovations Pvt. Ltd. | May 2024 - Aug 2024</p>
+                        <ul>
+                            <li>Developed full-stack web applications using React and Node.js</li>
+                            <li>Improved system performance by 30% through code optimization</li>
+                            <li>Collaborated with cross-functional teams on agile projects</li>
+                        </ul>
+                    </div>
+                    <div class="resume-item">
+                        <h4>Research Assistant</h4>
+                        <p class="meta">PDPU Research Lab | Jan 2024 - Present</p>
+                        <ul>
+                            <li>Conducting research on AI-driven solutions for sustainable energy</li>
+                            <li>Published 2 research papers in national conferences</li>
+                            <li>Mentoring junior students in machine learning projects</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="resume-section">
+                    <h3><i class="fas fa-award"></i> Certifications</h3>
+                    <div class="resume-item">
+                        <h4>AWS Certified Cloud Practitioner</h4>
+                        <p class="meta">Amazon Web Services | 2024</p>
+                    </div>
+                    <div class="resume-item">
+                        <h4>Full Stack Web Development</h4>
+                        <p class="meta">Coursera | 2023</p>
+                    </div>
+                    <div class="resume-item">
+                        <h4>Machine Learning Specialization</h4>
+                        <p class="meta">Stanford Online | 2024</p>
+                    </div>
+                </div>
+
+                <div class="resume-section">
+                    <h3><i class="fas fa-trophy"></i> Awards & Honors</h3>
+                    <div class="resume-item">
+                        <h4>Best Project Award</h4>
+                        <p class="meta">PDPU TechFest 2024</p>
+                        <p>Awarded for innovative AI-based energy management system</p>
+                    </div>
+                    <div class="resume-item">
+                        <h4>Dean's List</h4>
+                        <p class="meta">2023, 2024</p>
+                        <p>Recognized for academic excellence (top 5% of class)</p>
+                    </div>
+                    <div class="resume-item">
+                        <h4>Hackathon Winner</h4>
+                        <p class="meta">CodeFest Gujarat 2023</p>
+                        <p>First place in 36-hour coding marathon</p>
+                    </div>
+                </div>
+
+                <div class="resume-section full-width">
+                    <h3><i class="fas fa-laptop-code"></i> Technical Skills</h3>
+                    <div class="skills-grid">
+                        <div class="skill-tag">Python</div>
+                        <div class="skill-tag">JavaScript</div>
+                        <div class="skill-tag">Java</div>
+                        <div class="skill-tag">C++</div>
+                        <div class="skill-tag">React.js</div>
+                        <div class="skill-tag">Node.js</div>
+                        <div class="skill-tag">MongoDB</div>
+                        <div class="skill-tag">MySQL</div>
+                        <div class="skill-tag">Git & GitHub</div>
+                        <div class="skill-tag">AWS</div>
+                        <div class="skill-tag">Docker</div>
+                        <div class="skill-tag">TensorFlow</div>
+                        <div class="skill-tag">Machine Learning</div>
+                        <div class="skill-tag">Data Structures</div>
+                        <div class="skill-tag">REST APIs</div>
+                        <div class="skill-tag">Agile/Scrum</div>
+                    </div>
+                </div>
+
+                <div class="resume-section full-width">
+                    <h3><i class="fas fa-users-cog"></i> Soft Skills</h3>
+                    <div class="skills-grid">
+                        <div class="skill-tag">Leadership</div>
+                        <div class="skill-tag">Communication</div>
+                        <div class="skill-tag">Problem Solving</div>
+                        <div class="skill-tag">Team Collaboration</div>
+                        <div class="skill-tag">Time Management</div>
+                        <div class="skill-tag">Critical Thinking</div>
+                        <div class="skill-tag">Adaptability</div>
+                        <div class="skill-tag">Public Speaking</div>
+                    </div>
+                </div>
+
+                <div class="resume-section">
+                    <h3><i class="fas fa-hand-holding-heart"></i> Volunteer Experience</h3>
+                    <div class="resume-item">
+                        <h4>Tech Mentor - Code for Change</h4>
+                        <p class="meta">2023 - Present</p>
+                        <p>Teaching programming to underprivileged students</p>
+                    </div>
+                    <div class="resume-item">
+                        <h4>NSS Volunteer</h4>
+                        <p class="meta">2022 - 2024</p>
+                        <p>Participated in community service and social awareness programs</p>
+                    </div>
+                </div>
+
+                <div class="resume-section">
+                    <h3><i class="fas fa-running"></i> Co-Curricular & Hobbies</h3>
+                    <div class="resume-item">
+                        <h4>Technical Club Lead</h4>
+                        <p class="meta">PDPU Coding Club</p>
+                        <p>Organized workshops, hackathons, and coding competitions</p>
+                    </div>
+                    <div class="resume-item">
+                        <h4>Personal Interests</h4>
+                        <p>Chess, Photography, Open Source Contribution, Tech Blogging, Cricket</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects & Research Section -->
+    <section class="section" id="projects" style="background: white;">
+        <div class="container">
+            <div class="section-header">
+                <h2>Interdisciplinary Projects & Research</h2>
+                <p>Showcasing innovation through cross-disciplinary problem-solving</p>
+            </div>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-image" style="background-image: url('https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=600&h=400&fit=crop');"></div>
+                    <div class="project-content">
+                        <h3>AI-Powered Energy Management System</h3>
+                        <div class="project-meta">
+                            <span class="meta-badge"><i class="fas fa-calendar"></i> Jan 2024 - May 2024</span>
+                            <span class="meta-badge"><i class="fas fa-users"></i> Team of 4</span>
+                        </div>
+                        
+                        <h4>Project Overview</h4>
+                        <p>Developed an intelligent energy management system that uses machine learning to optimize power consumption in smart buildings, reducing energy waste by up to 35%.</p>
+                        
+                        <h4>Objectives</h4>
+                        <ul>
+                            <li>Create predictive models for energy consumption patterns</li>
+                            <li>Integrate IoT sensors for real-time data collection</li>
+                            <li>Develop user-friendly dashboard for monitoring</li>
+                        </ul>
+                        
+                        <h4>Methodologies</h4>
+                        <p>Utilized LSTM neural networks for time-series forecasting, implemented RESTful APIs for sensor integration, and designed responsive web interface using React.</p>
+                        
+                        <div class="project-tags">
+                            <span class="tag">Python</span>
+                            <span class="tag">TensorFlow</span>
+                            <span class="tag">IoT</span>
+                            <span class="tag">React</span>
+                            <span class="tag">MongoDB</span>
+                        </div>
+                        
+                        <div class="project-outcomes">
+                            <h4>Outcomes & Innovations</h4>
+                            <ul>
+                                <li>Achieved 35% reduction in energy consumption</li>
+                                <li>Won Best Project Award at PDPU TechFest 2024</li>
+                                <li>Published paper in National Conference on Smart Cities</li>
+                                <li>Deployed prototype in university campus building</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="project-challenges">
+                            <h4><i class="fas fa-exclamation-triangle"></i> Critical Analysis</h4>
+                            <p><strong>Challenge:</strong> Initial models showed poor accuracy due to irregular sensor data patterns.</p>
+                            <p><strong>Solution:</strong> Implemented data preprocessing pipeline with outlier detection and missing value imputation, improving model accuracy from 68% to 91%.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-image" style="background-image: url('https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&h=400&fit=crop');"></div>
+                    <div class="project-content">
+                        <h3>Healthcare Analytics Platform</h3>
+                        <div class="project-meta">
+                            <span class="meta-badge"><i class="fas fa-calendar"></i> Aug 2023 - Dec 2023</span>
+                            <span class="meta-badge"><i class="fas fa-users"></i> Individual Project</span>
+                        </div>
+                        
+                        <h4>Project Overview</h4>
+                        <p>Created a comprehensive healthcare data analysis platform that helps medical professionals identify disease patterns and predict patient outcomes using advanced analytics and visualization techniques.</p>
+                        
+                        <h4>Objectives</h4>
+                        <ul>
+                            <li>Analyze large-scale patient data to identify trends</li>
+                            <li>Develop predictive models for disease diagnosis</li>
+                            <li>Create interactive visualizations for medical insights</li>
+                        </ul>
+                        
+                        <h4>Methodologies</h4>
+                        <p>Applied ensemble learning techniques (Random Forest, XGBoost) for disease prediction, used D3.js for interactive data visualization, and implemented secure authentication for patient data privacy.</p>
+                        
+                        <div class="project-tags">
+                            <span class="tag">Machine Learning</span>
+                            <span class="tag">Data Analytics</span>
+                            <span class="tag">D3.js</span>
+                            <span class="tag">Flask</span>
+                            <span class="tag">PostgreSQL</span>
+                        </div>
+                        
+                        <div class="project-outcomes">
+                            <h4>Outcomes & Innovations</h4>
+                            <ul>
+                                <li>Achieved 89% accuracy in disease prediction models</li>
+                                <li>Processed and analyzed 100,000+ patient records</li>
+                                <li>Presented findings at State-level Health Tech Symposium</li>
+                                <li>Collaborated with local hospital for pilot testing</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="project-challenges">
+                            <h4><i class="fas fa-exclamation-triangle"></i> Critical Analysis</h4>
+                            <p><strong>Challenge:</strong> Handling imbalanced dataset with rare diseases underrepresented.</p>
+                            <p><strong>Solution:</strong> Implemented SMOTE (Synthetic Minority Over-sampling Technique) and cost-sensitive learning to improve rare disease detection rates by 45%.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-image" style="background-image: url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=600&h=400&fit=crop');"></div>
+                    <div class="project-content">
+                        <h3>Blockchain-Based Voting System</h3>
+                        <div class="project-meta">
+                            <span class="meta-badge"><i class="fas fa-calendar"></i> Feb 2024 - Jun 2024</span>
+                            <span class="meta-badge"><i class="fas fa-users"></i> Team of 3</span>
+                        </div>
+                        
+                        <h4>Project Overview</h4>
+                        <p>Designed and implemented a secure, transparent, and tamper-proof voting system using blockchain technology to address election integrity concerns and increase voter confidence.</p>
+                        
+                        <h4>Objectives</h4>
+                        <ul>
+                            <li>Ensure vote immutability and transparency</li>
+                            <li>Maintain voter anonymity while preventing fraud</li>
+                            <li>Create accessible interface for diverse user base</li>
+                        </ul>
+                        
+                        <h4>Methodologies</h4>
+                        <p>Developed smart contracts using Solidity on Ethereum blockchain, implemented cryptographic hashing for vote security, and created web3-enabled frontend for seamless user interaction.</p>
+                        
+                        <div class="project-tags">
+                            <span class="tag">Blockchain</span>
+                            <span class="tag">Solidity</span>
+                            <span class="tag">Ethereum</span>
+                            <span class="tag">Web3.js</span>
+                            <span class="tag">Cryptography</span>
+                        </div>
+                        
+                        <div class="project-outcomes">
+                            <h4>Outcomes & Innovations</h4>
+                            <ul>
+                                <li>Successfully conducted mock election with 500+ participants</li>
+                                <li>Zero security breaches during testing phase</li>
+                                <li>Reduced vote counting time from hours to minutes</li>
+                                <li>Research paper accepted at International Blockchain Conference</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="project-challenges">
+                            <h4><i class="fas fa-exclamation-triangle"></i> Critical Analysis</h4>
+                            <p><strong>Challenge:</strong> High gas fees made transactions expensive for users.</p>
+                            <p><strong>Solution:</strong> Migrated to Polygon (Layer 2 solution) reducing transaction costs by 95% while maintaining security. Also implemented batch processing for multiple votes.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Advanced Skills Section -->
+    <section class="section" id="skills">
+        <div class="container">
+            <div class="section-header">
+                <h2>Advanced Skill Development & Mastery</h2>
+                <p>Deep proficiencies across technical, creative, and interpersonal domains</p>
+            </div>
+            <div class="advanced-skills-grid">
+                <div class="skill-category">
+                    <h3><i class="fas fa-code"></i> Full-Stack Development</h3>
+                    <div class="skill-item-advanced">
+                        <h4>Frontend & Backend Expertise</h4>
+                        <p>Mastered modern web development stack including React.js, Node.js, and Express. Built 15+ production-ready applications with responsive design and optimal performance.</p>
+                        <span class="artifact-badge"><i class="fas fa-laptop-code"></i> Portfolio: github.com/jayghadiya09</span>
+                    </div>
+                    <div class="skill-item-advanced">
+                        <h4>Database Management</h4>
+                        <p>Proficient in both SQL (MySQL, PostgreSQL) and NoSQL (MongoDB) databases. Designed efficient schemas and optimized queries for applications handling millions of records.</p>
+                        <span class="artifact-badge"><i class="fas fa-database"></i> Performance Optimization Projects</span>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h3><i class="fas fa-robot"></i> Machine Learning & AI</h3>
+                    <div class="skill-item-advanced">
+                        <h4>Deep Learning & Neural Networks</h4>
+                        <p>Implemented various neural network architectures using TensorFlow and PyTorch. Specialized in time-series forecasting, image classification, and NLP applications.</p>
+                        <span class="artifact-badge"><i class="fas fa-brain"></i> Published Research Papers</span>
+                    </div>
+                    <div class="skill-item-advanced">
+                        <h4>Data Science & Analytics</h4>
+                        <p>Expert in data preprocessing, feature engineering, and statistical analysis using Python libraries (Pandas, NumPy, Scikit-learn). Created insightful visualizations with Matplotlib and Seaborn.</p>
+                        <span class="artifact-badge"><i class="fas fa-chart-bar"></i> Kaggle Datasets & Notebooks</span>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h3><i class="fas fa-comments"></i> Communication & Leadership</h3>
+                    <div class="skill-item-advanced">
+                        <h4>Technical Presentation Skills</h4>
+                        <p>Delivered 20+ technical presentations at conferences, workshops, and seminars. Skilled at explaining complex concepts to both technical and non-technical audiences.</p>
+                        <span class="artifact-badge"><i class="fas fa-microphone"></i> Speaker at TechFest 2024</span>
+                    </div>
+                    <div class="skill-item-advanced">
+                        <h4>Team Leadership & Collaboration</h4>
+                        <p>Led multiple cross-functional teams in hackathons and projects. Experienced in agile methodologies, conflict resolution, and fostering inclusive team environments.</p>
+                        <span class="artifact-badge"><i class="fas fa-users"></i> Team Lead Certifications</span>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h3><i class="fas fa-palette"></i> Creative & Design Thinking</h3>
+                    <div class="skill-item-advanced">
+                        <h4>UI/UX Design</h4>
+                        <p>Proficient in Figma and Adobe XD for creating user-centered designs. Apply design thinking methodology to solve complex user experience challenges with empathy-driven solutions.</p>
+                        <span class="artifact-badge"><i class="fas fa-pen-nib"></i> Design Portfolio on Behance</span>
+                    </div>
+                    <div class="skill-item-advanced">
+                        <h4>Problem-Solving & Innovation</h4>
+                        <p>Consistently approach challenges with creative solutions. Won 5 hackathons through innovative thinking and rapid prototyping of unconventional ideas.</p>
+                        <span class="artifact-badge"><i class="fas fa-lightbulb"></i> Innovation Awards</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Leadership Section -->
+    <section class="section" id="leadership" style="background: white;">
+        <div class="container">
+            <div class="section-header">
+                <h2>Collaborative & Leadership Experiences</h2>
+                <p>Building teams, driving results, and fostering inclusive environments</p>
+            </div>
+            <div class="leadership-grid">
+                <div class="leadership-card">
+                    <div class="leadership-header">
+                        <div class="leadership-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <div>
+                            <h3>Technical Club President</h3>
+                            <p class="role">PDPU Coding Club | 2023 - 2024</p>
+                        </div>
+                    </div>
+                    
+                    <h4>Roles & Responsibilities</h4>
+                    <ul>
+                        <li>Led team of 50+ members in organizing technical events and workshops</li>
+                        <li>Managed annual budget of ₹2 lakhs for club activities</li>
+                        <li>Coordinated with industry professionals for guest lectures</li>
+                        <li>Mentored 30+ junior students in competitive programming</li>
+                    </ul>
+                    
+                    <h4>Team Dynamics & Conflict Resolution</h4>
+                    <p>Faced challenge when team members had conflicting ideas for annual hackathon format. Facilitated open discussion sessions where each member presented their vision. Implemented democratic voting system and merged best ideas from different proposals. Result: Most successful hackathon with 200+ participants and positive feedback from 95% attendees.</p>
+                    
+                    <h4>Achievements & Contributions</h4>
+                    <ul>
+                        <li>Increased club membership by 150% in one year</li>
+                        <li>Organized 12 workshops with 1000+ total participants</li>
+                        <li>Secured sponsorships worth ₹5 lakhs for major events</li>
+                        <li>Club members won 8 national-level competitions under my leadership</li>
+                    </ul>
+                </div>
+
+                <div class="leadership-card">
+                    <div class="leadership-header">
+                        <div class="leadership-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div>
+                            <h3>Hackathon Team Lead</h3>
+                            <p class="role">Multiple Competitions | 2023 - 2024</p>
+                        </div>
+                    </div>
+                    
+                    <h4>Roles & Responsibilities</h4>
+                    <ul>
+                        <li>Led cross-functional teams of 4-5 members in 36-48 hour coding marathons</li>
+                        <li>Delegated tasks based on individual strengths and expertise</li>
+                        <li>Managed time constraints and pivoted strategies when needed</li>
+                        <li>Presented final pitches to judges and investors</li>
+                    </ul>
+                    
+                    <h4>Team Dynamics & Conflict Resolution</h4>
+                    <p>During Smart India Hackathon 2024, team faced major setback when primary solution approach failed 12 hours before deadline. Quickly called emergency meeting, fostered psychological safety for honest feedback, brainstormed alternative approaches, and redistributed workload. Despite pressure, maintained team morale through positive reinforcement and celebrated small wins. Successfully delivered innovative solution and secured finalist position.</p>
+                    
+                    <h4>Achievements & Contributions</h4>
+                    <ul>
+                        <li>Won 1st place in 3 major hackathons (CodeFest, HackDroid, InnovateTech)</li>
+                        <li>Secured 2nd and 3rd positions in 4 other competitions</li>
+                        <li>100% team satisfaction rate across all participated hackathons</li>
+                        <li>Developed reputation for building cohesive, high-performing teams</li>
+                    </ul>
+                </div>
+
+                <div class="leadership-card">
+                    <div class="leadership-header">
+                        <div class="leadership-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <div>
+                            <h3>Peer Tutor & Mentor</h3>
+                            <p class="role">PDPU Academic Support | 2023 - Present</p>
+                        </div>
+                    </div>
+                    
+                    <h4>Roles & Responsibilities</h4>
+                    <ul>
+                        <li>Provided one-on-one and group tutoring in programming and algorithms</li>
+                        <li>Guided 25+ students in project development and career planning</li>
+                        <li>Created study resources and coding practice problem sets</li>
+                        <li>Organized peer learning sessions and study groups</li>
+                    </ul>
+                    
+                    <h4>Team Dynamics & Conflict Resolution</h4>
+                    <p>Encountered situation where study group members had vastly different learning paces, causing frustration. Implemented tiered learning approach with advanced students helping beginners (peer teaching), which reinforced concepts for all. Created inclusive environment where questions were encouraged. This collaborative structure improved understanding and built supportive community.</p>
+                    
+                    <h4>Achievements & Contributions</h4>
+                    <ul>
+                        <li>Helped 20+ students improve grades from C to A/B range</li>
+                        <li>85% of mentees successfully placed in internships/jobs</li>
+                        <li>Received "Outstanding Mentor" award for two consecutive semesters</li>
+                        <li>Built lasting mentorship relationships extending beyond academics</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Global Awareness Section -->
+    <section class="section" id="global">
+        <div class="container">
+            <div class="section-header">
+                <h2>Global Awareness & Ethical Considerations</h2>
+                <p>Understanding technology's impact on society and ethical responsibility</p>
+            </div>
+            <div class="awareness-content">
+                <div class="case-study">
+                    <h3>Case Study: AI Bias in Healthcare Analytics</h3>
+                    
+                    <h4>Scenario</h4>
+                    <p>While developing the Healthcare Analytics Platform, I discovered that our disease prediction model showed significantly lower accuracy (15-20% less) for underrepresented minority populations. This bias stemmed from training data that predominantly featured majority demographic groups.</p>
+                    
+                    <h4>Analysis of Ethical Implications</h4>
+                    <p>This situation presented serious ethical concerns:</p>
+                    <ul>
+                        <li><strong>Health Equity:</strong> Biased algorithms could lead to misdiagnosis or delayed treatment for vulnerable populations, exacerbating existing healthcare disparities</li>
+                        <li><strong>Trust & Adoption:</strong> Communities affected by algorithmic bias may lose trust in AI-driven healthcare solutions</li>
+                        <li><strong>Legal & Professional Responsibility:</strong> Healthcare providers using biased tools could face legal liability and ethical violations</li>
+                        <li><strong>Systemic Implications:</strong> Deploying biased systems perpetuates and amplifies societal inequities through technology</li>
+                    </ul>
+                    
+                    <h4>Actions Taken</h4>
+                    <ul>
+                        <li>Immediately halted model deployment and informed project stakeholders</li>
+                        <li>Conducted comprehensive bias audit across all demographic segments</li>
+                        <li>Partnered with diverse healthcare institutions to collect representative data</li>
+                        <li>Implemented fairness constraints in model training (demographic parity, equalized odds)</li>
+                        <li>Established ongoing monitoring system to detect bias drift in production</li>
+                        <li>Created transparent documentation about model limitations and demographic performance</li>
+                    </ul>
+                    
+                    <div class="reflection-box">
+                        <h4>Personal Reflection</h4>
+                        <p>This experience fundamentally shaped my understanding of technology's responsibility. As developers, we don't just write code—we shape how society functions. I learned that:</p>
+                        <ul>
+                            <li>Technical excellence without ethical consideration can cause real harm</li>
+                            <li>Diverse perspectives in development teams are essential, not optional</li>
+                            <li>Transparency about AI limitations is as important as highlighting its capabilities</li>
+                            <li>We must actively work to prevent technology from amplifying societal inequities</li>
+                        </ul>
+                        <p><strong>My Commitment:</strong> I pledge to always prioritize ethical considerations in my work, advocate for inclusive design practices, and speak up when I identify potential harm in technological solutions.</p>
+                    </div>
+                </div>
+
+                <div class="case-study">
+                    <h3>Global Impact: Sustainable Technology Development</h3>
+                    
+                    <h4>Understanding Global Challenges</h4>
+                    <p>Through my AI-Powered Energy Management System project, I deepened my awareness of the climate crisis and technology's role in both causing and solving environmental problems. Data centers and computing infrastructure contribute significantly to global carbon emissions, yet technology is also our most powerful tool for creating sustainable solutions.</p>
+                    
+                    <h4>Ethical Considerations in My Work</h4>
+                    <ul>
+                        <li><strong>Environmental Impact:</strong> Ensuring my solutions reduce rather than increase carbon footprint</li>
+                        <li><strong>Accessibility:</strong> Making sustainable technology affordable and accessible to developing nations</li>
+                        <li><strong>Long-term Thinking:</strong> Designing systems that remain relevant and beneficial for decades</li>
+                        <li><strong>Global Collaboration:</strong> Contributing to open-source projects that address climate change</li>
+                    </ul>
+                    
+                    <div class="reflection-box">
+                        <h4>Personal Reflection on Global Responsibility</h4>
+                        <p>Working on energy management opened my eyes to the interconnectedness of global challenges. A solution developed in India can impact communities worldwide. This realization drives my commitment to:</p>
+                        <ul>
+                            <li>Consider global implications in every project I undertake</li>
+                            <li>Prioritize solutions that address UN Sustainable Development Goals</li>
+                            <li>Collaborate with international teams to gain diverse perspectives</li>
+                            <li>Use my technical skills to contribute to solving humanity's greatest challenges</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Future Aspirations Section -->
+    <section class="section" id="future" style="background: white;">
+        <div class="container">
+            <div class="section-header">
+                <h2>Future Aspirations & Professional Development</h2>
+                <p>Charting my path toward meaningful impact and continuous growth</p>
+            </div>
+            <div class="aspirations-grid">
+                <div class="aspiration-card">
+                    <h3><i class="fas fa-bullseye"></i> Career Goals</h3>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <h4>Short-term (1-2 years)</h4>
+                            <p>Secure position as Software Engineer at innovative tech company focused on AI/ML solutions. Contribute to impactful projects while learning from experienced mentors. Complete relevant industry certifications (Google Cloud Professional, Advanced ML specialization).</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4>Mid-term (3-5 years)</h4>
+                            <p>Transition into Technical Lead role, guiding teams on complex AI projects. Pursue Master's degree in Computer Science (specialization in AI/ML) from top-tier university. Begin contributing to academic research and publish papers in renowned conferences.</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4>Long-term (5-10 years)</h4>
+                            <p>Establish myself as AI ethics expert and thought leader. Found/co-found startup focused on ethical AI solutions for social good. Actively mentor next generation of engineers. Contribute to policy discussions on responsible AI development.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="aspiration-card">
+                    <h3><i class="fas fa-book-reader"></i> Areas for Further Study</h3>
+                    <ul style="margin-left:20px; color:var(--dark);">
+                        <li><strong>Advanced Machine Learning:</strong> Deep dive into reinforcement learning, generative AI, and neural architecture search</li>
+                        <li><strong>AI Ethics & Governance:</strong> Formal study of algorithmic fairness, bias mitigation, and responsible AI frameworks</li>
+                        <li><strong>Distributed Systems:</strong> Master scalable architecture for large-scale AI applications</li>
+                        <li><strong>Quantum Computing:</strong> Explore emerging intersection of quantum computing and machine learning</li>
+                        <li><strong>Human-Computer Interaction:</strong> Understand designing AI systems that genuinely serve human needs</li>
+                        <li><strong>Business & Entrepreneurship:</strong> Develop skills to transform technical innovations into sustainable businesses</li>
+                    </ul>
+                </div>
+
+                <div class="aspiration-card">
+                    <h3><i class="fas fa-chart-line"></i> Continuous Improvement Strategy</h3>
+                    <ul style="margin-left:20px; color:var(--dark);">
+                        <li><strong>Daily Learning:</strong> Dedicate 1-2 hours daily to reading research papers, coding practice, or online courses</li>
+                        <li><strong>Project-Based Learning:</strong> Build one substantial project quarterly to apply new concepts</li>
+                        <li><strong>Community Engagement:</strong> Actively participate in tech communities, attend conferences, contribute to open source</li>
+                        <li><strong>Mentorship:</strong> Both seek mentors for guidance and mentor others to reinforce my own learning</li>
+                        <li><strong>Cross-Disciplinary Learning:</strong> Study adjacent fields (psychology, ethics, business) to become well-rounded professional</li>
+                        <li><strong>Feedback Loops:</strong> Regularly seek constructive criticism and iterate on my work and communication style</li>
+                        <li><strong>Health & Balance:</strong> Maintain physical and mental wellness to sustain long-term productivity and creativity</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SWOT Analysis & Conclusion Section -->
+    <section class="section" id="swot">
+        <div class="container">
+            <div class="section-header">
+                <h2>Self-Assessment & Reflection</h2>
+                <p>Honest evaluation of my current position and growth areas</p>
+            </div>
+            
+            <div class="swot-grid">
+                <div class="swot-item strengths">
+                    <h3><i class="fas fa-star"></i> Strengths</h3>
+                    <ul>
+                        <li>Strong technical foundation with CGPA of 8.74 and practical project experience</li>
+                        <li>Proven leadership abilities demonstrated through club presidency and team successes</li>
+                        <li>Quick learner who adapts to new technologies and methodologies effectively</li>
+                        <li>Excellent problem-solving skills validated by hackathon victories</li>
+                        <li>Strong work ethic and commitment to quality and continuous improvement</li>
+                        <li>Effective communicator skilled at presenting complex ideas clearly</li>
+                        <li>Ethical mindset with genuine commitment to responsible technology development</li>
+                    </ul>
+                </div>
+
+                <div class="swot-item weaknesses">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Weaknesses</h3>
+                    <ul>
+                        <li>Limited exposure to large-scale production systems and enterprise environments</li>
+                        <li>Tendency to pursue too many interests simultaneously, sometimes losing focus</li>
+                        <li>Need to improve delegation skills—sometimes take on too much individually</li>
+                        <li>Less experience with hardware and low-level system programming</li>
+                        <li>Could benefit from stronger business and product management knowledge</li>
+                        <li>Public speaking skills need refinement for very large audiences (100+)</li>
+                        <li>Time management can improve during high-pressure situations with multiple deadlines</li>
+                    </ul>
+                </div>
+
+                <div class="swot-item opportunities">
+                    <h3><i class="fas fa-rocket"></i> Opportunities</h3>
+                    <ul>
+                        <li>Rapidly growing AI/ML industry with high demand for skilled professionals</li>
+                        <li>Increasing focus on ethical AI creating niche for my interests and values</li>
+                        <li>Strong startup ecosystem in India offering entrepreneurial pathways</li>
+                        <li>Access to world-class online education and certification programs</li>
+                        <li>Growing emphasis on sustainable technology aligns with my energy management work</li>
+                        <li>Active tech community providing networking and collaboration opportunities</li>
+                        <li>University's industry connections facilitating internships and research partnerships</li>
+                    </ul>
+                </div>
+
+                <div class="swot-item threats">
+                    <h3><i class="fas fa-shield-alt"></i> Threats</h3>
+                    <ul>
+                        <li>Rapid technological change requiring constant upskilling to stay relevant</li>
+                        <li>Highly competitive job market with many qualified candidates</li>
+                        <li>Economic uncertainties potentially affecting hiring in tech sector</li>
+                        <li>Risk of skill obsolescence if not continuously learning</li>
+                        <li>Potential burnout from maintaining high performance standards</li>
+                        <li>Geographic limitations if opportunities require international relocation</li>
+                        <li>Ethical compromises may be required in certain industry positions</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="conclusion-content" style="margin-top:60px;">
+                <h3>Conclusion & Key Reflections</h3>
+                
+                <p>This portfolio represents not just a collection of achievements, but a journey of continuous growth, learning, and self-discovery. Throughout my academic career at PDPU, I've evolved from an eager student learning to code into a confident technologist committed to using technology for positive social impact.</p>
+                
+                <div class="achievements-highlight">
+                    <h4>Key Achievements Summary</h4>
+                    <ul>
+                        <li>Maintained strong academic performance with 8.74 CGPA while actively engaging in extracurricular activities</li>
+                        <li>Successfully led and contributed to 10+ major technical projects with real-world applications</li>
+                        <li>Won 5 hackathons and received multiple awards for innovation and leadership</li>
+                        <li>Published research papers and presented at national conferences</li>
+                        <li>Mentored 50+ students and positively impacted their academic and career trajectories</li>
+                        <li>Developed strong technical proficiency across full-stack development, AI/ML, and emerging technologies</li>
+                        <li>Cultivated leadership skills through club presidency and team management experiences</li>
+                    </ul>
+                </div>
+
+                <h3>Lessons Learned</h3>
+                <p><strong>Technical Growth:</strong> Every project taught me that elegant solutions emerge from understanding problems deeply. The healthcare analytics bias issue showed me that technical excellence without ethical consideration is incomplete.</p>
+                
+                <p><strong>Leadership & Collaboration:</strong> I learned that great leaders don't have all the answers—they create environments where teams collectively find solutions. Empowering others often produces better results than working alone.</p>
+                
+                <p><strong>Resilience & Adaptability:</strong> Failed deployments, rejected proposals, and debugging marathons taught me that setbacks are setup for comebacks. The ability to pivot gracefully under pressure has become one of my most valuable skills.</p>
+                
+                <p><strong>Ethical Responsibility:</strong> Technology is never neutral. Every line of code carries implications. I've learned to ask not just "Can we build this?" but "Should we build this?" and "Who might this harm?"</p>
+
+                <h3>Areas for Growth</h3>
+                <p>Self-evaluation against my initial goals reveals strong progress in technical skills and project delivery, but highlights opportunities in business acumen and cross-cultural collaboration. My weakness in delegation and tendency toward perfectionism are areas requiring conscious effort and development.</p>
+                
+                <p>Moving forward, I'm committed to seeking international exposure, engaging with diverse perspectives, and developing the business skills necessary to translate technical innovations into sustainable impact. I also recognize the need to balance ambition with well-being to ensure long-term effectiveness.</p>
+
+                <h3>Final Reflection</h3>
+                <p>As I look toward my future career, I'm energized by the possibilities that lie ahead. The combination of strong technical foundation, ethical commitment, and leadership experience positions me to contribute meaningfully to our field. Yet I remain humble, recognizing that I'm still early in my journey with vast amounts to learn.</p>
+                
+                <p>I'm committed to lifelong learning, ethical practice, and using my skills to address meaningful challenges. Whether through innovative startups, impactful research, or mentoring the next generation, I aspire to leave the world better than I found it—one line of code, one project, one collaboration at a time.</p>
+                
+                <p style="font-style: italic; color: var(--primary); font-size:1.2rem; margin-top:30px;">"The best way to predict the future is to create it. I'm ready to build mine while helping others build theirs."</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="section" id="testimonials" style="background: white;">
+        <div class="container">
+            <div class="section-header">
+                <h2>Testimonials & Recommendations</h2>
+                <p>What mentors, professors, and colleagues say about my work</p>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <p class="testimonial-text">"Jay is an exceptional student who combines technical brilliance with strong ethical principles. His work on the AI-powered energy management system demonstrated not only coding prowess but also deep understanding of sustainability challenges. He consistently goes beyond requirements, showing genuine passion for creating meaningful solutions. I have no doubt he will make significant contributions to the field of AI and sustainable technology."</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">DM</div>
+                            <div class="author-info">
+                                <h4>Dr. Priya Mehta</h4>
+                                <p>Professor, Computer Science Department, PDPU</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <p class="testimonial-text">"During Jay's internship at our company, he impressed us with his ability to quickly understand complex systems and contribute meaningful code from day one. His solution for optimizing our database queries reduced response times by 40%. More importantly, he demonstrated excellent teamwork, always willing to help colleagues and share knowledge. Jay has the perfect blend of technical skills and soft skills that make him a valuable team member."</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">RS</div>
+                            <div class="author-info">
+                                <h4>Rajesh Singh</h4>
+                                <p>Senior Engineering Manager, Tech Innovations Pvt. Ltd.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <p class="testimonial-text">"As President of the Coding Club, Jay transformed our organization. He increased membership, secured substantial sponsorships, and most importantly, created an inclusive environment where every member felt valued. His leadership style is collaborative rather than authoritative—he empowers others to excel. Under his guidance, our club achieved more in one year than in the previous three combined. Jay is a natural leader with a genuine commitment to lifting others up."</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">AK</div>
+                            <div class="author-info">
+                                <h4>Prof. Amit Kumar</h4>
+                                <p>Faculty Advisor, PDPU Coding Club</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <p class="testimonial-text">"Jay mentored me during my second year when I was struggling with programming concepts. His patience, clear explanations, and encouragement completely changed my academic trajectory. He didn't just teach me code—he taught me how to think like a problem solver. Thanks to his guidance, I went from barely passing to being on the Dean's List. Jay is one of those rare individuals who genuinely invests in others' success without expecting anything in return."</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">SP</div>
+                            <div class="author-info">
+                                <h4>Sneha Patel</h4>
+                                <p>Junior Student, Computer Engineering, PDPU</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <p class="testimonial-text">"I've worked with Jay on multiple hackathon projects, and he's the best team lead I've encountered. He has this remarkable ability to stay calm under pressure, make quick decisions, and keep the team motivated even when things aren't going well. During Smart India Hackathon, when our primary approach failed halfway through, Jay's leadership got us back on track. His technical skills are impressive, but his people skills are what truly set him apart."</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">VT</div>
+                            <div class="author-info">
+                                <h4>Vikram Thakur</h4>
+                                <p>Hackathon Teammate & Fellow Student, PDPU</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="testimonial-content">
+                        <p class="testimonial-text">"Jay's research contribution to our AI ethics project was outstanding. He brought not just technical expertise but also genuine concern for the societal implications of our work. His analysis of algorithmic bias in healthcare systems was thorough and insightful, demonstrating maturity beyond his years. Jay has the intellectual rigor and ethical foundation necessary for impactful research. I strongly recommend him for any advanced study or research position."</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">DD</div>
+                            <div class="author-info">
+                                <h4>Dr. Deepak Desai</h4>
+                                <p>Research Supervisor, PDPU Research Lab</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="section" id="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2>Get In Touch</h2>
+                <p>Let's connect and explore opportunities for collaboration</p>
+            </div>
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <h3 style="color: var(--primary); margin-bottom:30px;">Contact Information</h3>
+                    <div class="contact-item">
+                        <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                        <div class="contact-text">
+                            <h4>Email</h4>
+                            <p><a href="mailto:darshbalar02@gmail.com">darshbalar02@gmail.com</a></p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon"><i class="fas fa-phone"></i></div>
+                        <div class="contact-text">
+                            <h4>Phone</h4>
+                            <p><a href="tel:+917777966496">+91 7777966496</a></p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        <div class="contact-text">
+                            <h4>Location</h4>
+                            <p>Ahmedabad, Gujarat, India</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon"><i class="fab fa-linkedin"></i></div>
+                        <div class="contact-text">
+                            <h4>LinkedIn</h4>
+                            <p><a href="https://www.linkedin.com/in/darsh-balar-802981279/" target="_blank">linkedin.com/in/darsh-balar-802981279/</a></p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <div class="contact-icon"><i class="fab fa-github"></i></div>
+                        <div class="contact-text">
+                            <h4>GitHub</h4>
+                            <p><a href="https://github.com/Darsh0002" target="_blank">github.com/Darsh0002</a></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact-info">
+                    <h3 style="color: var(--primary); margin-bottom:20px;">Areas of Interest</h3>
+                    <p style="color: var(--dark); line-height:1.7; margin-bottom:20px;">I'm always excited to discuss:</p>
+                    <ul style="margin-left:20px; color:var(--dark); line-height:1.8;">
+                        <li>Full-time software engineering opportunities</li>
+                        <li>AI/ML research collaborations</li>
+                        <li>Internship and project opportunities</li>
+                        <li>Speaking engagements at tech events</li>
+                        <li>Mentorship and knowledge sharing</li>
+                        <li>Open source contributions</li>
+                        <li>Startup and entrepreneurship ventures</li>
+                    </ul>
+                    <p style="color: var(--dark); margin-top:20px; line-height:1.7;">Whether you're a recruiter, fellow developer, researcher, or student, I'd love to hear from you. Feel free to reach out through any of the channels listed!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Darsh Balar</h3>
+                    <p style="color: rgba(255,255,255,0.8); margin-top:15px; line-height:1.6;">Computer Science & Engineering Student at PDPU, passionate about AI, sustainable technology, and ethical innovation. Building solutions that matter.</p>
+                    <div class="social-links">
+                        <a href="https://github.com/Darsh0002" class="social-link" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="https://www.linkedin.com/in/darsh-balar-802981279/" class="social-link" target="_blank" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="mailto:darshbalar02@gmail.com" class="social-link" title="Email"><i class="fas fa-envelope"></i></a>
+                        <a href="tel:+917777966496" class="social-link" title="Phone"><i class="fas fa-phone"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#philosophy">Learning Philosophy</a></li>
+                        <li><a href="#resume">Resume & CV</a></li>
+                        <li><a href="#projects">Projects</a></li>
+                        <li><a href="#skills">Skills</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>More</h3>
+                    <ul class="footer-links">
+                        <li><a href="#leadership">Leadership</a></li>
+                        <li><a href="#global">Global Awareness</a></li>
+                        <li><a href="#testimonials">Testimonials</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Portfolio Info</h3>
+                    <p style="color: rgba(255,255,255,0.8); margin-top:15px; line-height:1.6;">
+                        <strong>Institution:</strong> Pandit Deendayal Energy University<br>
+                        <strong>Program:</strong> B.Tech CSE (Batch: 2023 - 2027)<br>
+                        <strong>CGPA:</strong> 8.74/10.0<br>
+                        <strong>Higher Secondary:</strong> 2021 - 2023<br>
+                        <strong>Last Updated:</strong> 2025
+                    </p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Darsh Balar. All Rights Reserved. | Designed with passion for innovation and excellence.</p>
+                <p style="margin-top:10px;">This digital portfolio showcases my academic achievements, projects, skills, and professional journey.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Navigation Toggle
+        const mobileToggle = document.getElementById('mobileToggle');
+        const navLinks = document.getElementById('navLinks');
+        
+        mobileToggle.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // Smooth scrolling for all anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const offsetTop = target.offsetTop - 80;
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        let lastScroll = 0;
+
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+            
+            lastScroll = currentScroll;
+        });
+
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all major sections
+        document.querySelectorAll('.section').forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(20px)';
+            section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(section);
+        });
+
+        // Active navigation highlighting
+        const sections = document.querySelectorAll('.section, .cover');
+        const navItems = document.querySelectorAll('.nav-links a');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('href') === `#${current}`) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // Add hover effect to cards
+        document.querySelectorAll('.toc-item, .project-card, .skill-category, .testimonial-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transition = 'all 0.3s ease';
+            });
+        });
+
+        // Console message for visitors
+        console.log('%c👋 Hello there!', 'font-size: 20px; font-weight: bold; color: #3b82f6;');
+        console.log('%cThanks for checking out my portfolio!', 'font-size: 14px; color: #64748b;');
+        console.log('%cFeel free to reach out if you want to collaborate or just chat about tech!', 'font-size: 14px; color: #64748b;');
+        console.log('%c📧 jaypatel09@gmail.com', 'font-size: 14px; color: #3b82f6;');
+    </script>
+</body>
+</html>
